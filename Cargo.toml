@@ -1,0 +1,12 @@
+[package]
+authors = ["Junfeng Liu <china.liujunfeng@gmail.com>"]
+edition = "2018"
+name = "image-convolution"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bytemuck = "1.5.0"
+futures = {version = "0.3", default-features = false, features = ["std", "executor"]}
+wgpu = "0.7.0"
