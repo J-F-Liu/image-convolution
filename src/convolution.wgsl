@@ -37,17 +37,18 @@ fn main() {
         }
         var j: u32 = 0u;
         loop {
-           if (j >= size) {
-               break;
-           }
+            if (j >= size) {
+                break;
+            }
 
             var k: f32 = kernel.data[j * size + i];
             var x: u32 = global_id.x + i;
             var y: u32 = global_id.y + j;
             value = value + input.data[y * width + x] * k;
-           continuing {
-               j = j + 1u;
-           }
+
+            continuing {
+                j = j + 1u;
+            }
         }
         continuing {
             i = i + 1u;

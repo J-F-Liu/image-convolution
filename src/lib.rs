@@ -5,7 +5,7 @@ pub mod gpu_device;
 mod image;
 pub mod kernels;
 
-pub use image::Image;
+pub use crate::image::Image;
 pub use kernels::Kernel;
 
 pub enum BorderType {

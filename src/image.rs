@@ -21,6 +21,27 @@ impl Image {
     pub fn size(&self) -> u32 {
         self.width * self.height
     }
+
+    pub fn load<P: AsRef<std::path::Path>>(filepath: &P) -> Image {
+        let image = image::open(filepath).expect("read image file").into_luma8();
+        let (width, height) = image.dimensions();
+        let data = image.as_raw().iter().map(|pixel| *pixel as Real).collect();
+        Image {
+            data,
+            width,
+            height,
+        }
+    }
+
+    pub fn save<P: AsRef<std::path::Path>>(&self, filepath: P) {
+        let image = image::GrayImage::from_raw(
+            self.width,
+            self.height,
+            self.data.iter().map(|pixel| *pixel as u8).collect(),
+        )
+        .expect("Create output image");
+        image.save(filepath).expect("write image file");
+    }
 }
 
 impl std::ops::Index<(u32, u32)> for Image {

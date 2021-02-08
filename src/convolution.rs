@@ -1,6 +1,5 @@
 use crate::gpu_device::*;
 use crate::{Image, Kernel, Real};
-use std::borrow::Cow;
 
 pub async fn run(gpu_device: &GpuDevice, image: &Image, kernel: &Kernel) -> Image {
     let GpuDevice { device, queue } = gpu_device;
