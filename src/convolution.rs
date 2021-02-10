@@ -1,9 +1,7 @@
 use crate::gpu_device::*;
 use crate::{Image, Kernel, Real};
 
-pub async fn run(gpu_device: &GpuDevice, image: &Image, kernel: &Kernel) -> Image {
-    let GpuDevice { device, queue } = gpu_device;
-
+pub async fn run(device: &GpuDevice, image: &Image, kernel: &Kernel) -> Image {
     let crop = kernel.size - 1;
     let mut output = Image {
         data: Vec::new(),
@@ -15,15 +13,14 @@ pub async fn run(gpu_device: &GpuDevice, image: &Image, kernel: &Kernel) -> Imag
     let params_data = bytemuck::cast_slice(&params);
 
     // create input and output buffers
-    let input_buffer = create_data_buffer(&device, "input", bytemuck::cast_slice(&image.data));
-    let result_buffer = create_buffer(&device, "result", output_size);
-    let kernel_buffer = create_data_buffer(&device, "kernel", bytemuck::cast_slice(&kernel.data));
-    let params_buffer = create_uniform_buffer(&device, "params", params_data);
-    let output_buffer = create_output_buffer(&device, "output", output_size);
+    let input_buffer = device.create_data_buffer("input", bytemuck::cast_slice(&image.data));
+    let result_buffer = device.create_buffer("result", output_size);
+    let kernel_buffer = device.create_data_buffer("kernel", bytemuck::cast_slice(&kernel.data));
+    let params_buffer = device.create_uniform_buffer("params", params_data);
+    let output_buffer = device.create_output_buffer("output", output_size);
 
     // create bind group and compute pipeline
-    let (bind_group, compute_pipeline) = create_compute_pipeline(
-        device,
+    let (bind_group, compute_pipeline) = device.create_compute_pipeline(
         &[
             (
                 &input_buffer,
@@ -50,8 +47,9 @@ pub async fn run(gpu_device: &GpuDevice, image: &Image, kernel: &Kernel) -> Imag
     );
 
     // encode and run commands
-    let mut encoder =
-        device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
+    let mut encoder = device
+        .device
+        .create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
 
     {
         let mut cpass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor { label: None });
@@ -61,12 +59,12 @@ pub async fn run(gpu_device: &GpuDevice, image: &Image, kernel: &Kernel) -> Imag
     }
     // copy data from input buffer on GPU to output buffer on CPU
     encoder.copy_buffer_to_buffer(&result_buffer, 0, &output_buffer, 0, output_size);
-    queue.submit(Some(encoder.finish()));
+    device.queue.submit(Some(encoder.finish()));
 
     // read output_buffer
     let buffer_slice = output_buffer.slice(..);
     let buffer_future = buffer_slice.map_async(wgpu::MapMode::Read);
-    device.poll(wgpu::Maintain::Wait);
+    device.device.poll(wgpu::Maintain::Wait);
 
     // Awaits until `buffer_future` can be read from
     if let Ok(()) = buffer_future.await {

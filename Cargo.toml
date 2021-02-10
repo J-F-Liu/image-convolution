@@ -1,7 +1,11 @@
 [package]
 authors = ["Junfeng Liu <china.liujunfeng@gmail.com>"]
+categories = ["graphics"]
+description = "Parallel image convolution on GPU."
 edition = "2018"
+license = "MIT"
 name = "image-convolution"
+repository = "https://github.com/J-F-Liu/image-convolution"
 version = "0.1.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -9,5 +13,5 @@ version = "0.1.0"
 [dependencies]
 bytemuck = "1.5.0"
 futures = {version = "0.3", default-features = false, features = ["std", "executor"]}
-wgpu = "0.7.0"
 image = "0.23.13"
+wgpu = "0.7.0"
