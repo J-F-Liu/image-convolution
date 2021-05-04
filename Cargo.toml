@@ -14,4 +14,4 @@ version = "0.1.0"
 bytemuck = "1.5.0"
 futures = {version = "0.3", default-features = false, features = ["std", "executor"]}
 image = "0.23.13"
-wgpu = "0.7.0"
+wgpu = "0.8.0"

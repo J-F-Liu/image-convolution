@@ -1,6 +1,3 @@
-[[builtin(global_invocation_id)]]
-var global_id: vec3<u32>;
-
 [[block]]
 struct Image {
     data: [[stride(4)]] array<f32>;
@@ -25,7 +22,7 @@ struct Params {
 var<uniform> params: Params;
 
 [[stage(compute), workgroup_size(1)]]
-fn main() {
+fn main([[builtin(global_invocation_id)]] global_id : vec3<u32>) {
     var width: u32 = params.image_width;
     var size: u32 = params.kernel_size;
 

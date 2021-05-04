@@ -2,7 +2,7 @@ use crate::Real;
 
 /// Square shaped convolution kernel
 pub struct Kernel {
-    pub data: Vec<Real>,
+    pub data: Vec<Real>, // data length is size×size
     pub size: u32,
 }
 
