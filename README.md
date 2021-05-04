@@ -4,5 +4,5 @@ Run example:
 
 ```
 cargo run --example gaussian -- IMAGE_FILE
-cargo run --release --example gaussian -- IMAGE_FILE
+cargo run --release --example gradient -- IMAGE_FILE
 ```

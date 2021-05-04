@@ -37,7 +37,7 @@ impl Image {
         let image = image::GrayImage::from_raw(
             self.width,
             self.height,
-            self.data.iter().map(|pixel| *pixel as u8).collect(),
+            self.data.iter().map(|pixel| pixel.abs() as u8).collect(),
         )
         .expect("Create output image");
         image.save(filepath).expect("write image file");

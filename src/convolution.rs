@@ -25,7 +25,7 @@ pub async fn run(device: &GpuDevice, image: &Image, kernel: &Kernel) -> Image {
             (
                 &input_buffer,
                 4,
-                wgpu::BufferBindingType::Storage { read_only: false },
+                wgpu::BufferBindingType::Storage { read_only: true },
             ),
             (
                 &result_buffer,
@@ -35,7 +35,7 @@ pub async fn run(device: &GpuDevice, image: &Image, kernel: &Kernel) -> Image {
             (
                 &kernel_buffer,
                 4,
-                wgpu::BufferBindingType::Storage { read_only: false },
+                wgpu::BufferBindingType::Storage { read_only: true },
             ),
             (
                 &params_buffer,
